@@ -64,5 +64,7 @@ int main() {
             }
         }
     }
+
     close(sockfd);
+    
 }
