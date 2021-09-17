@@ -10,9 +10,8 @@
 #define CLIENTPORT 0
 
 void main() {
-    int ClientSocket, bindfd, connfd;
+    int ClientSocket;
     struct sockaddr_in clientAddr;
-    struct sockaddr_in serverAddr;
     char buf[1024];
 
     if ((ClientSocket = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
@@ -20,24 +19,13 @@ void main() {
         exit(1);
     }
 
-    memset(&ClientSocket, 0, sizeof(clientAddr));
+    memset(&clientAddr, 0, sizeof(clientAddr));
 
     clientAddr.sin_family = AF_UNIX;
     clientAddr.sin_port = CLIENTPORT;
     clientAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-    if ((bindfd = bind(ClientSocket, (struct sockaddr*)&clientAddr, sizeof(clientAddr))) == -1) {
-        perror("Bind failure");
-        exit(1);
-    }
-
-    memset(&serverAddr, 0, sizeof(serverAddr));
-
-    serverAddr.sin_family = AF_UNIX;
-    serverAddr.sin_port = htnos(PORT);
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    if ((connfd = connect(ClientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr))) == -1) {
+    if ((connect(ClientSocket, (struct sockaddr*)&clientAddr, sizeof(clientAddr))) == -1) {
         perror("Connection error");
         exit(1);
     }

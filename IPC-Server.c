@@ -7,12 +7,10 @@
 #include<arpa/inet.h>
 
 #define PORT 0
-#define TEMPPORT 0
 
 void main() {
-    int sockfd, socktemp, bindfd, sendfd;
-    struct sockaddr_in serverAddr, tempAddr, clientAddr;
-    socklen_t addr_size;
+    int sockfd, socktemp;
+    struct sockaddr_in serverAddr, clientAddr;
     char buf[1024];
 
     if ((sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
@@ -26,18 +24,9 @@ void main() {
     serverAddr.sin_port = htons(PORT);
     serverAddr.sin_family = AF_UNIX;
 
-    if ((bindfd = bind(socktemp, (struct sockaddr*)&socktemp, sizeof(socktemp))) == -1) {
-        perror("Bind failure");
-        exit(1);
-    }
-
-    tempAddr.sin_port = TEMPPORT;
-
     listen(sockfd, 10);
-
-    addr_sizeof(clientAddr);
     
-    if ((socktemp = accept(sockfd, (struct sockaddr*)&tempAddr, sizeof(socktemp))) == -1) {
+    if ((socktemp = accept(sockfd, (struct sockaddr*)&clientAddr, sizeof(clientAddr))) == -1) {
         perror("Accept failure");
         exit(1);
     }
@@ -45,7 +34,7 @@ void main() {
     while(1) {
         memset(buf, 0, sizeof(buf));
         fgets(buf, 1024, stdin);
-        if ((sendfd = send(socktemp, buf, strlen(buf), 0)) == -1) {
+        if ((send(socktemp, buf, strlen(buf), 0)) == -1) {
             perror("Send failure");
             exit(1);
         }
