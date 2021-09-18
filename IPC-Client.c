@@ -37,6 +37,5 @@ void main() {
         }
         memset(buf, 0, sizeof(buf));
     }
-    close(ClientSocket);
     exit(0);
 }

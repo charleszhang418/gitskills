@@ -12,6 +12,7 @@ void main() {
     int sockfd, socktemp;
     struct sockaddr_in serverAddr, clientAddr;
     char buf[1024];
+    socklen_t client_addrlen;
 
     if ((sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
         perror("Socket build failure");
@@ -26,7 +27,7 @@ void main() {
 
     listen(sockfd, 10);
     
-    if ((socktemp = accept(sockfd, (struct sockaddr*)&clientAddr, sizeof(clientAddr))) == -1) {
+    if ((socktemp = accept(sockfd, (struct sockaddr*)&clientAddr, &client_addrlen)) == -1) {
         perror("Accept failure");
         exit(1);
     }
@@ -43,6 +44,5 @@ void main() {
             break;
         }
     }
-    close(sockfd);
     exit(0);
 }
